@@ -40,4 +40,43 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
-}
+
+    // decode instruction -----------------------------------------------------
+    Not(in=instruction[15], out=isAInstruction);
+    Mux16(a=instruction, b[0..15]=false, sel=isAInstruction, 
+    
+    out[0]=j3, out[1]=j2, out[2]=j1,
+    out[3]=writeM, out[4]=d2, out[5]=d1,
+    out[6]=c6, out[7]=c5, out[8]=c4, out[9]=c3, out[10]=c2, out[11]=c1,
+    out[12]=a);
+
+    // d-register -----------------------------------------------------
+    DRegister(in=outALU, load=d2, out=regD);
+    
+    // a-register -----------------------------------------------------
+    Mux16(a=outALU, b=instruction, sel=isAInstruction, out=muxA);
+    Or(a=isAInstruction, b=d1, out=loadA);
+    ARegister(in=muxA, load=loadA, out[0..14]=addressM, out=regA);
+
+    // select A or M based on 'a' value in instruction. (instruction[12])
+    Mux16(a=regA, b=inM, sel=a, out=regAM);
+
+    // ALU -----------------------------------------------------
+    ALU(x=regD, y=regAM, zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=outALU, out=outM, zr=isZero, ng=isNegative);
+
+    // PC -----------------------------------------------------
+    // determine if output is positive
+    Not(in=isNegative, out=notNegative);
+    Not(in=isZero, out=notZero);
+    And(a=notNegative, b=notZero, out=isPositive);
+
+    // check against jump bits
+    And(a=isPositive, b=j3, out=positiveJump);
+    And(a=isZero, b=j2, out=zeroJump);
+    And(a=isNegative, b=j1, out=negativeJump);
+    Or(a=positiveJump, b=zeroJump, out=zeroOrPositive);
+    Or(a=zeroOrPositive, b=negativeJump, out=loadPC);
+
+    // counter chip
+    PC(in=regA, load=loadPC, inc=true, reset=reset, out[0..14]=pc);
+} 
