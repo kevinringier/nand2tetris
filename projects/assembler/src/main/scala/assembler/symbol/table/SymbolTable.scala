@@ -33,11 +33,11 @@ object SymbolTable {
   }
 
   private def buildSymbolTable(commands: List[Command], table: SymbolTable): Unit = {
-    var lineNumber = 0
+    var romAddress = 0
     commands.foreach {
       case L_COMMAND(c) if !table.keySet.contains(c) =>
-        table.addOne((c, lineNumber))
-      case _ => lineNumber += 1
+        table.addOne((c, romAddress))
+      case _ => romAddress += 1
     }
   }
 

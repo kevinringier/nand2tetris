@@ -1,0 +1,7 @@
+
+
+gcc -Wall vmtranslator.c parser.c code.c util.c code_primitives.c -o translator
+
+
+
+./translator.exe "C:\Users\Kevin\Desktop\minus.vm"
