@@ -88,7 +88,8 @@ A_INSTRUCTION a_instruction = {
 
 Label label_chars = {
     .label_prefix = "(",
-    .label_suffix = ")"
+    .label_suffix = ")",
+    .label_function_infix = "$"
 };
 
 void construct_dest_comp(Dest c_dest, Comp c_comp, char *dest) {
@@ -115,7 +116,7 @@ void construct_a_value(int value, char *dest) {
     printf("FORMAT");
     sprintf(str_val, "%d", value);
 
-    printf("CAT FORMATtED");
+    printf("CAT FORMATTED");
     strcat(dest, str_val);
     strcat(dest, newline);
 }
@@ -133,4 +134,12 @@ void construct_label(char *label, char *instruction) {
     strcat(instruction, newline);
 }
 
-
+void construct_static_label(char *curr_vm_file, int value, char *instruction) {
+    strcat(instruction, a_instruction.prefix);
+    strcat(instruction, curr_vm_file);
+    strcat(instruction, ".");
+    char str_val[64];
+    sprintf(str_val, "%d", value);
+    strcat(instruction, str_val);
+    strcat(instruction, newline);
+}

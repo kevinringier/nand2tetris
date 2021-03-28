@@ -104,6 +104,7 @@ typedef char * LabelChar;
 typedef struct {
     LabelChar label_prefix;
     LabelChar label_suffix;
+    LabelChar label_function_infix;
 } Label;
 
 extern Label label_chars;
@@ -117,5 +118,7 @@ void construct_a_value(int, char *);
 void construct_a_label(A_Label, char *);
 
 void construct_label(char *, char *);
+
+void construct_static_label(char *, int, char *);
 
 #endif

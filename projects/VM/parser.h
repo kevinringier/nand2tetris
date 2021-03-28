@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-FILE *openStream(char *);
+FILE *open_stream(char *);
 
-int hasMoreCommands(FILE *);
+int has_more_commands(FILE *);
 
 char *advance(FILE *);
 
@@ -18,5 +18,7 @@ char *parse_arg_two(char *);
 int mapWordtoCommand(char *);
 
 int isArithmetic(char *);
+
+char *parse_file_name(char *);
 
 #endif

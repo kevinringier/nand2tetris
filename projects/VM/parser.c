@@ -5,11 +5,11 @@
 
 // TODO: is this good practice for import syntax?
 
-FILE *openStream(char *filePath) {
+FILE *open_stream(char *filePath) {
     return fopen(filePath, "r");
 }
 
-int hasMoreCommands(FILE *fptr) {
+int has_more_commands(FILE *fptr) {
    int c = getc(fptr);
 
    return c == EOF ? 0 : ungetc(c, fptr);
@@ -30,6 +30,8 @@ char *advance(FILE *fptr) {
 
 int commandType(char *line) {
     // copy argument to avoid mutating original value
+    // TODO: refactor to make copy of input and return dynamically allocated string to avoid bug issues
+    // for some reason this currently works
     char copy[strlen(line)];
     strcpy(copy, line);
     const char *delimiter = " ";
@@ -42,7 +44,14 @@ int commandType(char *line) {
 char *parse_arg_one(char *line, int commandType) {
     // TODO: refactor this, caller shouldn't have to know to free value
     size_t length = strlen(line);
-    char copy[length];
+
+   /* initializing array with non-constant value caused undefined behavior
+    * Supposedly this was supposed to be supported in c.
+    * I don't feel like investigating the issue so I'm using dynamic memory allocation 
+    * char copy[length];
+    */ 
+
+    char *copy = calloc(length, sizeof(char));
     strcpy(copy, line);
     const char *delimiter = " ";
     char *token;
@@ -55,6 +64,7 @@ char *parse_arg_one(char *line, int commandType) {
 
     char *retval = calloc(1024, sizeof(char));
     strcpy(retval, token); 
+    free(copy);
 
     return retval;
 }
@@ -62,7 +72,7 @@ char *parse_arg_one(char *line, int commandType) {
 char *parse_arg_two(char *line) {
     // TODO: refactor this, caller shouldn't have to know to free value
     size_t length = strlen(line);
-    char copy[length];
+    char *copy = calloc(length, sizeof(char));
     strcpy(copy, line);
     const char *delimiter = " ";
     char *token;
@@ -74,6 +84,7 @@ char *parse_arg_two(char *line) {
     
     char *retval = calloc(1024, sizeof(char));
     strcpy(retval, token); 
+    free(copy);
 
     return retval;
 }
@@ -83,7 +94,7 @@ int mapWordtoCommand(char *word) {
 
     if (strcmp(word, "push") == 0) {
         commandType = C_PUSH;
-    } else if (strcmp(word, "funciton") == 0) {
+    } else if (strcmp(word, "function") == 0) {
         commandType = C_FUNCTION;
     } else if (strcmp(word, "label") == 0) {
         commandType = C_LABEL;
@@ -119,4 +130,15 @@ int isArithmetic(char *word) {
     return 0;
 }
 
+char *parse_file_name(char *file_path) {
+    printf("parse_file_name: %s\n", file_path);
 
+    size_t length = strlen(file_path);
+    char *copy = calloc(length, sizeof(char));
+    strcpy(copy, file_path);
+
+    copy = trim_file_path(copy);
+    copy = trim_file_extension(copy);
+
+    return copy;
+}

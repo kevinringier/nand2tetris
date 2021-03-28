@@ -25,6 +25,20 @@ int isFullLineComment(char *);
 
 int isComment(char *);
 
-int isArg2CommandType(int);
+int is_arg2_command_type(int);
+
+int is_function(int);
+
+int is_call(int);
+
+int is_program_flow_command(int);
+
+char *get_write_to_file_path(char *);
+
+char *trim_file_path(char *);
+
+char *trim_file_extension(char *);
+
+int is_file_path(char *);
 
 #endif

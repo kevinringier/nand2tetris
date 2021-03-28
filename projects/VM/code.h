@@ -39,9 +39,9 @@ void arithmetic_bitwise_or(char *);
 
 void arithmetic_bitwise_not(char *);
 
-void generate_return_address(char *, char *);
+void generate_return_address_and_jump_to_label(char *, char *);
 
-void write_value_to_segment(char *, int index, char *);
+void write_value_to_segment(char *, int, char *, char *);
 
 void write_equality_labels(char *);
 
@@ -49,11 +49,11 @@ void write_greater_than_labels(char *);
 
 void write_less_than_labels(char *);
 
-void write_push_pop(int, char *, int, char *);
+void write_push_pop(int, char *, int, char *, char *);
 
 void close_write(FILE *);
 
-void extract_segment_value(char *, int, char *);
+void extract_segment_value(char *, int, char *, char *);
 
 void extract_constant_segment(int, char *);
 
@@ -62,5 +62,27 @@ void push_d_register_to_stack(char *);
 void increment_stack_pointer(char *);
 
 void decrement_stack_pointer(char *);
+
+void writeInit(char *);
+
+void writeLabel(char *, char *);
+
+void writeGoto(char *, char *);
+
+void writeIf(char *, char *);
+
+void write_call(char *, int, char *);
+
+char *generate_function_return(char *);
+
+void write_return(char *);
+
+void write_function(char *, int, char *);
+
+void write_program_flow(int, char *, char *);
+
+void write_init();
+
+void write_static_variable(char *, int, char *);
 
 #endif
